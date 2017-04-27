@@ -37,18 +37,14 @@
     $(document).ready(function($) {
         //  用户信息请求
         $.get("/getData/" + token,function(data){
-            console.log(data);
             if(data.meta.code == 200){
                 heroMaxCount = data.data.data;
                 derma = data.data.derma;
                 userName = data.data.userName;
                 saveCookie(userName + "heroMaxCount",heroMaxCount)
-
                 saveCookie(userName + "derma",derma)
-
                 if(parseInt(derma)){
                     $("section").css({
-                        // "background": "url(/images/hero-b" + parseInt(Math.round(Math.random() + 1)) + ".jpg) no-repeat",
                         "background": "url(/images/hero-b5.jpg) no-repeat",
                         "background-size": "100% 100%"
                     });
@@ -63,16 +59,13 @@
             $(this).fadeOut('0').siblings().fadeIn(400);
             gameTouch = true;
         })
-        // 长按事件
-        // 按住屏幕使竿变长
+        // 长按事件 按住屏幕使竿变长
         $('section').on('touchstart',function(event) {
             event.preventDefault();
             if(gameTouch){
                 // 竿变大
                 (function boxWidth(obj) {
-                    // console.log(obj.h);
                     obj.h++;
-                    // console.log(height);
                     that = $(".select").parent();
                     $(".select").css({
                         "height": obj.h + "px",
@@ -85,7 +78,6 @@
             }else{
                 return;
             }
-            
         });
         // 手指离开屏幕
         $('section').on('touchend',function(event) {
@@ -94,9 +86,6 @@
             }
             gameTouch = false;
             event.preventDefault();
-            // if($(".option-em").hasClass('select')){
-            //     gameTouch = false;
-            // }
             // 清计时器
             clearInterval(sofarH.timer);
             // 清除按住事件
@@ -106,7 +95,6 @@
                 "transition": "0.3s",
                 "transform": "rotate(90deg)"
             }).removeClass('select');
-            
             // 判断杠的长度是否在合理范围内
             var minWidth = parseInt(that.next().css("margin-left")); //竿的最小长度
             var maxWidth = minWidth + that.next().width(); //竿的最大长度
@@ -117,44 +105,34 @@
                 stageBox();
                 sofarH.count += 100;
                 $(".count").html(sofarH.count);
-                // console.log(sofarH.sL + "sofarH.sL");
                 setTimeout(function() {
                     sofarH.h = 0;
                     gameTouch = true;
                     $(".hero").animate({
                         "left": successLeft
                     },400);
-                    // that.removeClass('class name')
                     that.next().children('em').addClass('select option-em');
                     sofarH.sL = sofarH.sL + parseInt(that.width()) + minWidth;
-
                     $(".stage").animate({
                         "scrollLeft": sofarH.sL
                     },400)
                 },400)
-
                 return;
             } else { //掉下去
                 console.log("game over");
-                // console.log(sofarH.h);
                 $(".hero").animate({
                     "left": failLeft
                 },400);
                 // 最高记录写入
                 if(heroMaxCount<sofarH.count){
-                    console.log("adsfasdf");
                     saveCookie(userName + "heroMaxCount",sofarH.count)
-
                     // 发送请求到服务器保存最高记录 
                     $.get("/updateData/insert?token=" + token + "&data=" + sofarH.count,function(data){
-                        console.log(data);
                         if(data.meta.code == 200){
-                             console.log("写入成功");
+                             console.log("write success");
                         }
-                        
                     })
                 }
-                
                 setTimeout(function() {
                     that.children(".option-em").css({
                         "transition": "0.3s",
@@ -194,13 +172,10 @@
                                 "background-size": "100% 100%"
                             });
                         }
-                        
                     })
-                    
                 }else{
                     alert("不能重复购买")
                 }
-                
             }else{
                 alert("请选择商品");
             }
@@ -209,37 +184,16 @@
         $(".ranking-btn").on('click', function(event) {
             event.preventDefault();
             /* Act on the event */
-            console.log("发送请求");
             $(".ranking-list").html("")
-
-
             $.get("/getData/list",function(data){
-                /**
-                    伪数据
-                    var listData = gameResponse.data.sort(compare("data")).reverse();
-                    listData.forEach(function(v,i){
-                        if(i<9){
-                            // console.log(v);
-                            $(".ranking-list").append("<li>" + v.userName + " : " + v.data + "</li>")
-                        }
-                    })
-                */
-                
-                /**
-                    真实数据
-                    
-                    
-                */
                 if(data.meta.code == 200){
                     var listData = data.data.sort(compare("data")).reverse();
                     listData.forEach(function(v,i){
                         if(i<9){
-                            console.log(v);
                             $(".ranking-list").append("<li>" + v.userName + " : " + v.data + "</li>")
                         }
                     })
                 }
             })
-            
         });
     });
