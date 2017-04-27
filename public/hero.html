@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name ="keywords" content="www.sofar.online,Sofar,sofar,Mr.Sofar,Mr.Sofar个人博客,Mr.Sofar个人网站,Mr.Sofar前端开发攻城狮,sofar.online,前端开发攻城狮">
+    <meta name ="author" content="Mr.Sofar">
+    <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico" />
+    <title>Mr.Sofar</title>
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js" type="text/javascript"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+
+    <link rel="stylesheet" href="/css/hero.css">
+</head>
+<body>
+    <section>
+        <!-- <div class="wrap"></div> -->
+        <div class="stage">
+            <ul class="stage-list">
+              
+            </ul>
+            <!-- <div></div> -->
+        </div>
+
+    </section>
+    <div class="begin">
+        <div class="game-info">
+            <div class="count">0</div>
+            <strong class="game-tip">按住屏幕使竿变长</strong>
+        </div>
+        <div class="begin-btn">开始</div>
+    </div>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-default buy-btn" data-toggle="modal" data-target="#myModal">
+        购买皮肤
+    </button>
+    <button type="button" class="btn btn-default ranking-btn" data-toggle="modal" data-target="#myModal1">
+        游戏排行
+    </button>
+    <!-- 皮肤商城 -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">
+                            &times;
+                        </span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        皮肤商城
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="checkbox" id="checkBox">
+                        <label>
+                            <input type="checkbox" >2017限量版皮肤
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        取消
+                    </button>
+                    <button type="button" class="btn btn-primary" id="buyBtn">
+                        购买
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 游戏排行 -->
+    <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">
+                            &times;
+                        </span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        排行榜
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <ul class="ranking-list">
+                        
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">
+                        确定
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/js/hero-fun.js"></script>
+    <script src="/js/hero.js"></script>
+
+    <script>
+    </script>
+</body>
+</html>

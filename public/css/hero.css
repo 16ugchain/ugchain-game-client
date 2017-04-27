@@ -1,0 +1,135 @@
+body,html {
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+section {
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    /*background: url(/images/hero-back.png) no-repeat;*/
+    background-size: 100% 100%;
+
+    
+    /*height: 500px;*/
+    /*background: #fe0;*/
+    /*padding-top: 100px;*/
+}
+.wrap {
+    width: 0px;
+    height: 5px;
+    background: #000;
+    }
+.stage {
+    position: absolute;
+    /*overflow-x:auto ;*/
+    overflow: hidden; 
+    
+    
+    width: 100%;
+    height: 100%;
+    padding-top: 100%;
+    /*background: #000;*/
+    /*height: 300px;*/
+}
+.stage-list {
+    position: relative;
+    list-style: none;
+    width: 10000%;
+    /*overflow-x: auto;*/
+    /*overflow-y: hidden; */
+    /*overflow: hidden;*/
+    /*max-width: 100%;*/
+    height: 100%;
+    padding: 0px;
+    /*margin: 70% 0 0;*/
+}
+.stage-list li  {
+    float: left;
+    /*display: inline-block;*/
+    position: relative;
+    width: 50px;
+    height:100%;
+    background: #000;
+    /*margin-right:100px; */
+}
+.option-em {
+    position: absolute;
+    right: -2.5px;
+    top: 5px;
+    width: 5px;
+    height: 0px;
+    background: #000;
+    transform-origin: bottom center;
+}
+.hero {
+    position: absolute;
+    top: -24px;
+    /*left:根据地下的台柱判断*/
+    width:26px;
+    height: 24px;
+    background: url(/images/hero.png) no-repeat;
+    background-size: 100% 100%;
+}
+.begin {
+    position: fixed;
+    top: 0%;
+    /*left: 50%;*/
+    width: 90px;
+    height: 300px;
+    /*margin-left: -45px;*/
+    /*margin-left:-45px;*/
+    margin: 0 auto;
+    /*font-size: 30px;*/
+    text-align: center;
+}
+.begin-btn {
+    width: 88px;
+    height: 88px;
+    line-height: 88px;
+    font-size: 20px;
+    margin: 100px auto 0;
+    background: #e74256;
+    color: #fff;
+    border-radius: 50%;
+    
+    /*text-align: center;*/
+}
+.game-info {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    display: none;
+    font-size: 18px;
+}
+.count {
+    width: 80px;
+    height: 50px;
+    margin: 100px auto 0px;
+    line-height: 50px;
+    /*text-align: center;*/
+    color: #fff;
+    background: rgba(0,0,0,0.2);
+    border-radius: 10px;
+}
+.game-tip {
+    /*font-size: 16px;*/
+
+}
+.buy-btn {
+	position: fixed;
+	top: 0px;
+	right: 0px;
+	z-index: 100;
+}
+.ranking-btn {
+    position: fixed;
+    top: 35px;
+    right: 0px;
+    z-index: 100;
+}
+.ranking-list {
+    list-style: none;
+}
