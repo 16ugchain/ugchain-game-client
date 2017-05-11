@@ -10,11 +10,11 @@ function gameLayoutFun(){
     // 初始站台
     $('.stage-list').html('<div class="hero"></div><li><em class="option-em select"></em></li>')
     // 页面背景
-    $("section").css({
-        // "background": "url(/images/hero-b" + parseInt(Math.round(Math.random() + 1)) + ".jpg) no-repeat",
-        "background": "url(/images/hero-b0.png) no-repeat",
-        "background-size": "100% 100%"
-    });
+    // $("section").css({
+    //     // "background": "url(/images/hero-b" + parseInt(Math.round(Math.random() + 1)) + ".jpg) no-repeat",
+    //     "background": "url(/images/hero-b0.png) no-repeat",
+    //     "background-size": "100% 100%"
+    // });
     // 英雄位置
     $(".hero").css({
         "left": $(".stage-list li").eq(0).width() - $(".hero").width(),
@@ -31,6 +31,7 @@ function gameLayoutFun(){
     
     // 随机站台嵌入
     stageBox();
+    
 }
 // 站台随机生成
 function stageBox() {
@@ -63,21 +64,34 @@ function judgeDermaId(id,arr){
 }
 // 获取用户数据
 function getUserData(token,name){
+    console.log("参数name："+name);
     $.ajax({
-        url: 'http://192.168.5.5:8088/getData/' + token + "?userName=" + name,
+        url: host + '/getData/' + token,
         dataType: 'jsonp',
+        data: {
+            "userName": name
+        },
         cache: false,
         timeout: 5000,
         // jsonp 字段含义为服务器通过什么字段获取回调函数的名称
         jsonp: 'callback',
         // 声明本地回调函数的名称，jquery 默认随机生成一个函数名称
-        jsonpCallback: 'jsonpCallback',
+        jsonpCallback: 'jsonpUseData',
         success: function(body) {
+            // $.cookie("randomSeed",randomSeed);
+            saveCookie("gameToken",token)
+            saveCookie("gameAddress",gameAddress)
+            saveCookie("randomSeed",randomSeed)
+            console.log("密语："+$.cookie("randomSeed"));
             if(body.meta.code == 200){
                 heroMaxCount = body.data.data;
                 buyDermaIdEd = body.data.derma;
                 // console.log(buyDermaIdEd);
                 userName = body.data.userName;
+                console.log("用户名：" + userName);
+                console.log("最高分：" + heroMaxCount);
+                console.log("购买过的皮肤" + JSON.stringify(buyDermaIdEd));
+
                 saveCookie(userName + "-heroMaxCount",heroMaxCount)
                 saveCookie(userName + "-derma",JSON.stringify(buyDermaIdEd));
                 // 切换到最后一次购买的皮肤
@@ -89,8 +103,7 @@ function getUserData(token,name){
                 }
                 // 进入游戏界面
                 $(".init-account").hide();
-
-                $("#userInfo").html("").append("<p class='username'>" + userName + "</p>").append("<p class='eth'>ETH: " + getBalance() + "</p>").append("<p class='ug'>UG：" + getUGToken() + "</p>").append("<p class='max-count'>最高分：" + heroMaxCount + "</p>");
+                $("#userInfo").html("").append("<p class='user-name'>用户名：" + userName + "</p>").append("<p class='eth'>ETH: " + getBalance() + "</p>").append("<p class='ug'>UG：" + getUGToken() + "</p>").append("<p class='max-count'>最高分：" + heroMaxCount + "</p>");
                 // $("#userInfo").html( + "\n\r" + "ETH: 30")
                 console.log(body);
             }
@@ -121,11 +134,11 @@ if((channel.indexOf("0x") != 0 && channel.indexOf("0X") != 0) || channel.length 
 function initWallet(){
     newWallet(function(err,address){
         if(err == null){
-            $("#tip-content").html("创建成功，账号地址为：<span class='text-primary'>"+address+"</span>");
+            $("#adress-content").html("创建成功，账号地址为：<span class='text-primary'>"+address+"</span>");
             gameAddress = address;
-            heroObj.modal("#tip","show",function(){
+            heroObj.modal("#adressTip","show",function(){
                 console.log("地址：" + address);
-                console.log("密语：" + $.cookie("randomSeed"));
+                // console.log("密语：" + $.cookie("randomSeed"));
             });
         }else{
             alert(err)
@@ -138,11 +151,12 @@ function restoreWalletFromSeed(){
         restoreWallet($.cookie("randomSeed"),function(err,address){
             if(err == null){
                 gameAddress = address;
-                heroObj.modal("#tip","show",function(){
-                    $("#tip-content").html("账号地址为：<span class='text-primary'>"+address+"</span>");
+                heroObj.modal("#adressTip","show",function(){
+                    $("#adress-content").html("导入成功账号地址为：<span class='text-primary'>"+address+"</span>");
                     console.log("地址：" + address);
-                    console.log("密语：" + $.cookie("randomSeed"));
+                    // console.log("密语：" + $.cookie("randomSeed"));
                 });
+                getToken();
             }else{
                 alert(err)
             }
@@ -162,28 +176,82 @@ function getBalance(){
 // 获取token
 function getToken(){
     var player = getPlayerAddress();
-    console.log(GAME_ID);
-    console.log(player);
-    console.log(channel);
+    // console.log(player);
+    console.log("游戏ID："+GAME_ID);
+    console.log("url参数："+channel);
 
     // console.log(GAME_ID);
     getPlayerToken(player,GAME_ID,channel,function(error,token){
+        gameTokenArr = token;
         if(error != null){
             console.log(error)
         }else{
-            // console.log("adsfadfaf");
-            console.log(token);
-            console.log(typeof token);
-            if(typeof token === "object"){
-                gameToken = token[0].token;
+
+            // TODO 这边可能存在多个token
+            if(gameTokenArr.length>0){
+                // 查询token售卖情况
+                var arrText = "";
+                gameTokenArr.forEach(function(v,i){
+                    console.log(v.token)
+                    if(i<1){
+                        arrText += v.token;
+                    }else{
+                        arrText += "," + v.token;
+                    }
+                })
+                console.log(arrText);
+                $.ajax({
+                    url: host + '/getData/status',
+                    dataType: 'jsonp',
+                    data: {
+                        tokens: arrText,
+                        type: 1
+                    },
+                    cache: false,
+                    timeout: 5000,
+                    // jsonp 字段含义为服务器通过什么字段获取回调函数的名称
+                    jsonp: 'callback',
+                    // 声明本地回调函数的名称，jquery 默认随机生成一个函数名称
+                    jsonpCallback: 'jsonpGameId',
+                    success: function(body) {
+                        console.log("###返回值###")
+                        console.log(body);
+                        console.log("###########")
+                        if(body.meta.code == 200){
+                            gameTokenArr.forEach(function(v,i){
+                                console.log(v.token);
+                                console.log(body.data[v.token])
+                                v.status = body.data[v.token]
+                            })
+                            // console.log(gameTokenArr);
+                            console.log("##### gameToken ####");
+                            $("#token-content").html("");
+                            console.log()
+                            gameTokenArr.forEach(function(v,i){
+                                if(v.status === true){
+                                    $("#token-content").append('<div class="radio disabled text-muted"><label><input type="radio" name="optionsRadios" id="optionsRadios' + i + '" value="' + v.token + '" disabled><span class="token-alias">' + web3.toUtf8(v.alias) + '</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>待售中...</span></label></div>');
+                                }else{
+                                    $("#token-content").append('<div class="radio"><label><input type="radio" name="optionsRadios" id="optionsRadios' + i + '" value="' + v.token + '" ><span class="token-alias">' + web3.toUtf8(v.alias) + '</span></label></div>');
+
+                                }
+                                
+                            })
+                        }
+                    }
+                })
+                
+
+                
             }else{
-                gameToken = token;
+                console.log("空token数组")
+                $("#userName").addClass('name-status');
             }
-           
-            console.log("token：" + gameToken);
+            
+
+
             // gameToken = token[0].token;
             // alert(gameToken);
-            $("#tip-content").html("token：" + gameToken);
+            // $("#tip-content").html("token：" + gameToken);
         }
     })
 }
@@ -194,7 +262,83 @@ function getUGToken(){
     console.log("ug余额："+ug);
     return ug;
 }
+// 查询状态
+function queryStatus(tradeId,dermaId,buyDermaIdEd){
+    var queryTimer = null;
+    $.ajax({
+        url: host + '/getOrder/' + tradeId + '/derma',
+        dataType: 'jsonp',
+        cache: false,
+        timeout: 5000,
+        // jsonp 字段含义为服务器通过什么字段获取回调函数的名称
+        jsonp: 'callback',
+        // 声明本地回调函数的名称，jquery 默认随机生成一个函数名称
+        jsonpCallback: 'jsonpStatus',
+        success: function(data) {
+            if(data.meta.code == 200){
+                if(data.data.status == 1){
+                    $(".hero-mask").fadeIn(0, function() {
+                        $(".spiner-example").fadeOut(0);
+                        $(".mask-content").html("购买成功")
+                    });
+                    buyDermaIdEd.push(dermaId);
+                    saveCookie(userName + "-derma",JSON.stringify(buyDermaIdEd))
+                    // 发送请求到服务器进行确认 
+                    console.log("购买成功");
+                    console.log(buyDermaIdEd);
+                    clearTimeout(queryTimer);
+                    $('#myModal').modal('hide');
 
+                    $("section").css({
+                        // "background": "url(/images/hero-b" + parseInt(Math.round(Math.random() + 1)) + ".jpg) no-repeat",
+                        "background": "url(/images/hero-b" + buyDermaIdEd[buyDermaIdEd.length-1] + ".png) no-repeat",
+                        "background-size": "100% 100%"
+                    });
+                    setTimeout(function(){
+                        $(".hero-mask").fadeOut(0, function() {
+                            $(".spiner-example").fadeIn(0);
+
+                            $(".mask-content").html("")
+                        });
+                    },1000)
+                    
+                }else{
+                    console.log("交易状态未改变");
+                    setTimeout(function(){
+                        console.log("正在查询订单状态...")
+                        queryTimer = queryStatus(tradeId,dermaId,buyDermaIdEd)
+                    },2000);
+                    // alert("请稍等。。。");
+                }
+            }else{
+                console.log("订单查询失败");
+            }
+
+        }
+        
+    })
+}
+/**
+    获取game id
+*/
+function getGameId() {
+    $.ajax({
+        url: host + '/getData/currentGame',
+        dataType: 'jsonp',
+        cache: false,
+        timeout: 5000,
+        // jsonp 字段含义为服务器通过什么字段获取回调函数的名称
+        jsonp: 'callback',
+        // 声明本地回调函数的名称，jquery 默认随机生成一个函数名称
+        jsonpCallback: 'jsonpGameId',
+        success: function(body) {
+            if(body.meta.code == 200){
+                GAME_ID = body.data.gameId;
+                console.log(GAME_ID);
+            }
+        }
+    })
+}
 
 
 

@@ -8,10 +8,10 @@
     <meta name ="author" content="Mr.Sofar">
     <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico" />
     <title>Mr.Sofar</title>
-    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <script src="http://cdn.bootcss.com/jquery/1.11.3/jquery.min.js" type="text/javascript"></script>
-    <script src="http://cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js" type="text/javascript"></script>
-    <script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <script src="/js/jquery.min.js" type="text/javascript"></script>
+    <script src="/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="/js/jquery.cookie.min.js"></script>
     <link rel="stylesheet" href="/css/hero.css">
 
     <!-- TODO -->
@@ -20,6 +20,31 @@
     <script type="text/javascript" src="/js/hooked-web3-provider.js"></script>
     <script type="text/javascript" src="/js/async.js"></script>
     <script src="/js/sdk.js"></script>
+    <!-- <link href="/css/animate.css" rel="stylesheet"> -->
+
+    <script>
+        /**
+            游戏数据
+                sofarW：站台宽度
+                sofarM：站台间距
+                heroMaxCount： 最高分
+        */
+            window['sofarW'] = ["20px", "50px", "25px", "35px", "45px", "30px", "40px"];
+            window['sofarM'] = ["30px", "40px", "50px", "60px", "70px", "80px", "90px", "100px", "110px", "120px"];
+            window["that"];
+            var heroMaxCount = 0;
+            var buyDermaIdEd = [];
+            var userName = "";
+            var gameTouch = false; 
+            var gameAddress = "";           //地址
+            var gameToken = "";             //游戏token
+            var GAME_ID;                //游戏ID
+            var balance = 0;                //余额
+            var ug = 0;
+            var host = "http://192.168.5.5:8088";
+            var gameTokenArr = [];
+            var importCreat = 0;
+    </script>
     <style>
         .init-account {
             /*display: none;*/
@@ -45,7 +70,7 @@
             display: none;
         }
         .name-status {
-            display: none;
+            display: block;
         }
         .sell-btn {
             position: fixed;
@@ -63,6 +88,19 @@
     </style>
 </head>
 <body>
+    <!-- 遮罩层 -->
+    <div class="hero-mask container">
+        <div class="spiner-example">
+            <div class="sk-spinner sk-spinner-three-bounce">
+                <div class="sk-bounce1"></div>
+                <div class="sk-bounce2"></div>
+                <div class="sk-bounce3"></div>
+            </div>
+        </div>
+        <div class="mask-content">
+            
+        </div>
+    </div>
     <!-- 初始账号界面 -->
     <div class="init-account container">
         <div class="row init-before" >
@@ -71,13 +109,14 @@
         </div>
         <div class="row init-after">
             <div class="form-group col-xs-10 col-xs-offset-1">
-                
-                <input type="text" id="userName" class="form-control" placeholder="username">
+                <input type="text" id="userName"  class="username form-control" placeholder="username">
             </div>
+            <!-- <div class="form-group col-xs-10 col-xs-offset-1">
+                <input type="text" id="userName"  class="token-code form-control" placeholder="username" disabled="disable">
+            </div> -->
             <div class="form-group col-xs-10 col-xs-offset-1">
                 <button class="btn btn-danger" style="width:100%;" id="EnterBtn">进入游戏</button>
             </div>
-            
         </div>
     </div>
     <!-- 游戏界面 -->
@@ -112,7 +151,7 @@
         <button type="button" class="btn btn-default ranking-btn" data-toggle="modal" data-target="#myModal1">
             游戏排行
         </button>
-        <button type="button" class="btn btn-default sell-btn" data-toggle="modal" data-target="#myModal2">
+        <button type="button" class="btn btn-default sell-btn" data-toggle="modal" data-target="#sellTip">
             出售账号
         </button>
         <button type="button" class="btn btn-danger begin-test">
@@ -148,8 +187,8 @@
             </div>
         </div>
     </div>
-    出售账号
-    <div class="modal fade" id="myModa2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <!-- 出售账号 -->
+    <div class="modal fade" id="sellTip" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -165,36 +204,18 @@
                 <div class="modal-body" id="modalBox">
                     <form class="form-horizontal">
                         <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-2 control-label">
-                                Email
+                            <label for="inputPrices" class="col-sm-2 control-label">
+                                单价
                             </label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="inputEmail3" placeholder="Email">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="inputPassword3" class="col-sm-2 control-label">
-                                Password
-                            </label>
-                            <div class="col-sm-10">
-                                <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10">
-                                <button type="" class="btn btn-default">
-                                    出售
-                                </button>
+                                <input type="nubmer" class="form-control" id="inputPrices" placeholder="请输入价格">
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">
-                        取消
-                    </button>
-                    <button type="button" class="btn btn-primary" id="buyBtn">
-                        购买
+                    <button type="" class="btn btn-danger" id="pricesBtn">
+                        出售
                     </button>
                 </div>
             </div>
@@ -227,7 +248,7 @@
             </div>
         </div>
     </div>
-    <!-- 操作提醒 -->
+    <!-- 系统操作提醒 -->
     <div class="modal fade" id="tip" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -254,13 +275,70 @@
             </div>
         </div>
     </div>
+    <!-- 地址操作提醒 -->
+    <div class="modal fade" id="adressTip" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">
+                            &times;
+                        </span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        系统提示
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div id="adress-content">
+                        
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    
+                    <button type="button" class="btn btn-primary" id="getTokenBtn">
+                        获取token
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- token获取提醒 -->
+    <div class="modal fade" id="tokenTip" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">
+                            &times;
+                        </span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        请选择账户
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div id="token-content">
+                        
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="initTokenBtn">
+                        创建新账户
+                    </button>
+                    <button type="button" class="btn btn-primary" id="chooseTokenBtn" >
+                        确定
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     
 
-    <script src="/js/hero-fun.js"></script>
-    <script src="/js/hero.js"></script>
-    <script src="/js/user.js"></script>
 
-    <script>
-    </script>
+    <script src="/js/hero-fun.js"></script>
+    <script src="/js/user.js"></script>
+    <script src="/js/hero.js"></script>
 </body>
 </html>
