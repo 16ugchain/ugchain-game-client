@@ -103,7 +103,7 @@ function getUserData(token,name){
                 }
                 // 进入游戏界面
                 $(".init-account").hide();
-                $("#userInfo").html("").append("<p class='user-name'>用户名：" + userName + "</p>").append("<p class='eth'>ETH: " + getBalance() + "</p>").append("<p class='ug'>UG：" + getUGToken() + "</p>").append("<p class='max-count'>最高分：" + heroMaxCount + "</p>");
+                $("#userInfo").html("").append("<p class='user-name'>用户名：" + userName + "</p>").append("<p class='eth'>地址余额/ETH: " + getBalance() + "</p>").append("<p class='ug'>账户余额/ETH: " + getUGToken()/1e18 + "</p>").append("<p class='max-count'>最高分：" + heroMaxCount + "</p>");
                 // $("#userInfo").html( + "\n\r" + "ETH: 30")
                 console.log(body);
             }

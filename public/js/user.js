@@ -169,7 +169,7 @@
                 if(body.meta.code == 200){
                     var dermaArr = body.data;
                     dermaArr.forEach(function(v,i){
-                        $("#modalBox").append('<div class="radio"><label><input type="radio" name="optionsRadios" id="optionsRadios' + v.id + '" value="' + v.id + '"><span class="derma-name">' + v.name + '</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="derma-prices">' + v.prices + '</span></label></div>');
+                        $("#modalBox").append('<div class="radio"><label><input type="radio" name="optionsRadios" id="optionsRadios' + v.id + '" value="' + v.id + '"><span class="derma-name">' + v.name + '</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="derma-prices">' + v.prices/1000 + '</span></label></div>');
                     })
                 }
             }
@@ -234,7 +234,19 @@
                                 console.log(err);
                                 console.log(data1);
                                 // 查询订单状态
-                                queryStatus(tradeId,dermaId,buyDermaIdEd)
+                                if(data1){
+                                    queryStatus(tradeId,dermaId,buyDermaIdEd)
+                                }else{
+                                    $(".hero-mask").fadeIn(100, function() {
+                                        $(".mask-content").html("购买失败")
+                                    });
+                                    setTimeout(function(){
+                                        $(".hero-mask").fadeOut(100, function() {
+                                            $(".mask-content").html("")
+                                        });
+                                    },500)
+                                    
+                                }
                                 
                                 $('#myModal').modal('hide');
                                 $(".ug").html("UG："+getUGToken());
@@ -247,6 +259,10 @@
                 })
             }else{
                 alert("已购买过此皮肤");
+                $("section").css({
+                    "background": "url(/images/hero-b" + $('#modalBox input:radio:checked').val() + ".png) no-repeat",
+                    "background-size": "100% 100%"
+                });
             }
         }
         $(".game-tip").on('click', function(event) {
@@ -327,17 +343,13 @@
                 // 创建新token
                 if(userName){
                     console.log(userName);
-                    // if($("#userName").hasClass('name-status')){
-                    //     console.log("创建新token");
-                    //     getUserData(gameToken,userName);
-                    // }else{
-                    //     console.log("获取已有token");
-                        getUserData(gameToken,userName);
+                    getUserData(gameToken,userName);
                 }else{
                     alert("请输入用户名");
                 }
+            }else{
+                getUserData(gameToken,userName);
             }
-            getUserData(gameToken,userName);
 
             
             

@@ -76,6 +76,8 @@ function initGameToken(player,gameId,channel,aliasName,callback,importCreat){
     player = "0x" + player;
     token = das.getPlayerToken(player,gameId);
     if(token == '0x' || importCreat){
+        console.log("step 1");
+
         balance = getEtherBalance(player)
         if(web3.fromWei(balance,"ether") < 1){
             callback("No enough ether for Transaction",null)
@@ -101,6 +103,7 @@ function initGameToken(player,gameId,channel,aliasName,callback,importCreat){
             })
         }
     }else{
+      console.log("step 2");
         callback(null,deserializeToken(token));
     }
 }
@@ -183,7 +186,7 @@ function restoreWallet(seed,callback) {
 }
 
 function newWallet(callback) {
-  var extraEntropy =  '';
+  var extraEntropy = '';
   randomSeed = lightwallet.keystore.generateRandomSeed(extraEntropy);
 
   var infoString = 'Your new wallet seed is: "' + randomSeed +

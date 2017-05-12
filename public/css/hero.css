@@ -111,7 +111,7 @@ section {
 .count {
     width: 80px;
     height: 50px;
-    margin: 150px auto 0px;
+    margin: 180px auto 0px;
     line-height: 50px;
     /*text-align: center;*/
     color: #fff;
@@ -212,7 +212,9 @@ section {
 .mask-content {
     margin-top: 20px;
 }
-
+.panel {
+    background: rgba(255,255,255,0.6);
+}
 
 
 
