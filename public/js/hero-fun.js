@@ -132,6 +132,7 @@ if((channel.indexOf("0x") != 0 && channel.indexOf("0X") != 0) || channel.length 
 }
 // 初始化钱包
 function initWallet(){
+
     newWallet(function(err,address){
         if(err == null){
             $("#adress-content").html("创建成功，账号地址为：<span class='text-primary'>"+address+"</span>");
@@ -147,16 +148,23 @@ function initWallet(){
 }
 // 用密语找回地址
 function restoreWalletFromSeed(){
-    if($.cookie("randomSeed")){
-        restoreWallet($.cookie("randomSeed"),function(err,address){
+    
+    if($("#inputSeed").val()){
+        restoreWallet($("#inputSeed").val(),function(err,address){
             if(err == null){
                 gameAddress = address;
+                heroObj.modal("#seedTip","hide",function(){
+
+                });
                 heroObj.modal("#adressTip","show",function(){
                     $("#adress-content").html("导入成功账号地址为：<span class='text-primary'>"+address+"</span>");
                     console.log("地址：" + address);
                     // console.log("密语：" + $.cookie("randomSeed"));
                 });
                 getToken();
+                if(gameToken.length>0){
+                    $("#userName").removeClass('name-status');
+                }
             }else{
                 alert(err)
             }
@@ -166,6 +174,7 @@ function restoreWalletFromSeed(){
             $("#tip-content").html("本地暂时没有密语，请创建账号");
         });
     }
+
 }
 // 获取余额
 function getBalance(){

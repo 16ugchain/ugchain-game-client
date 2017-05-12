@@ -21,7 +21,7 @@
     // test
     // $.cookie("randomSeed","maid summer poet photo decrease immense rude float feel speed chimney foil");
     // fan
-    $.cookie("randomSeed","someone silver autumn tumble fan door rally limit range behind verify clerk");
+    // $.cookie("randomSeed","someone silver autumn tumble fan door rally limit range behind verify clerk");
 
 /*
     游戏初始化
@@ -100,6 +100,8 @@
                 heroObj.modal("#tokenTip","hide",function(){
                     console.log(gameToken);
                 });
+                getUserData(gameToken,userName);
+
             }
         });
         

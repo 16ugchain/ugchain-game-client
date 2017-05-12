@@ -217,10 +217,10 @@
                             console.log(body.data.seller);
                             var tradeId = body.data.orderId
                             var seller = body.data.seller
-                            $(".hero-mask").fadeIn(100, function() {
-                                $(".mask-content").html("购买皮肤进行中...")
-                            });
+                            
                             var prices = $('#modalBox input:radio:checked').siblings('span.derma-prices').html();
+                            prices = web3.toWei(+prices,"ether");
+                            console.log(prices);
                             console.log("###########");
                             
                             console.log("支付金额："+prices+"\r\n订单号："+tradeId+"\r\n支付地址："+seller+"\r\n本账号地址："+gameAddress)
@@ -228,6 +228,12 @@
                             console.log(GAME_ID);
                             console.log(prices); 
                             console.log(gameAddress);
+                            setTimeout(function(){
+                                $(".hero-mask").fadeIn(100, function() {
+                                    $(".mask-content").html("购买皮肤进行中...")
+                                });
+                            },0)
+                            
                             // 发起支付
                             pay(GAME_ID,tradeId,seller,prices,gameAddress,function(err,data1){
                                 console.log("支付成功");
@@ -249,7 +255,7 @@
                                 }
                                 
                                 $('#myModal').modal('hide');
-                                $(".ug").html("UG："+getUGToken());
+                                $(".ug").html("账户余额/ETH："+getUGToken()/1e18);
                                 // 查询订单状态
                                 
                             });
@@ -308,14 +314,24 @@
     $("#channelAccount").on('click', function(event) {
         event.preventDefault();
         /* Act on the event */
-        restoreWalletFromSeed()
-        console.log("进入导入账号流程");
+        // restoreWalletFromSeed()
+        heroObj.modal("#seedTip","show",function(){
 
-        if(gameToken.length>0){
-            $("#userName").removeClass('name-status');
-        }
-        
+        });
+        console.log("输入密语流程");
         console.log()
+    });
+/**
+    密语解密
+*/
+    $("#seedBtn").on('click', function(event) {
+        event.preventDefault();
+        /* Act on the event */
+        if($("#inputSeed").val()){
+            restoreWalletFromSeed();
+        }else{
+            console.log("error");
+        }
     });
 /**
     进入游戏按钮点击事件
@@ -363,9 +379,12 @@
                 userName = $("#userName").val();
                 if(userName){
                     // 初始化token
-                    $(".hero-mask").fadeIn(0, function() {
-                        $(".mask-content").html("获取Token进行中...");
-                    });
+                    setTimeout(function(){
+                        $(".hero-mask").fadeIn(0, function() {
+                            $(".mask-content").html("获取Token进行中...");
+                        });
+                    },0)
+                    
                     initGameToken(gameAddress,GAME_ID,channel,userName,function(error,token){
                         console.log("新建账号 TODO")
                         if(error != null){
@@ -373,6 +392,8 @@
                             heroObj.modal("#tip","show",function(){
                                 $("#tip-content").html(error);
                             });
+
+                            
                         }else{
                             
                             getPlayerToken(gameAddress,GAME_ID,channel,function(error,token){
@@ -388,9 +409,12 @@
 
                             })
                         }
-                        $(".hero-mask").fadeOut(0, function() {
-                            $(".mask-content").html("")
-                        });
+                        setTimeout(function(){
+                            $(".hero-mask").fadeOut(0, function() {
+                                $(".mask-content").html("")
+                            });
+                        },1)
+                        
                         
                     },importCreat)
                 }else{
