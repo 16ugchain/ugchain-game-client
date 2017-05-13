@@ -255,7 +255,7 @@
                                 }
                                 
                                 $('#myModal').modal('hide');
-                                $(".ug").html("账户余额/ETH："+getUGToken()/1e18);
+                                $(".ug").html("账户余额："+getUGToken());
                                 // 查询订单状态
                                 
                             });
