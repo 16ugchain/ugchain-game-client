@@ -170,9 +170,9 @@ function restoreWalletFromSeed(){
             }
         })
     }else{
-        heroObj.modal("#tip","show",function(){
-            $("#tip-content").html("本地暂时没有密语，请创建账号");
-        });
+        // heroObj.modal("#tip","show",function(){
+        //     $("#tip-content").html("本地暂时没有密语，请创建账号");
+        // });
     }
 
 }

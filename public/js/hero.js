@@ -104,6 +104,19 @@
 
             }
         });
+        // 新token直接进入游戏
+        $("#newToken").on('click', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            console.log("获取新token,直接跳转");
+            if(gameToken){
+                console.log("新token直接进入游戏");
+                heroObj.modal("#tip","hide",function(){
+                    console.log(gameToken);
+                });
+                getUserData(gameToken,userName);
+            }
+        });
         
 
     });
