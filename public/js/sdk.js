@@ -134,7 +134,7 @@ function pay(gameId,tradeId,seller,amount,player,callback){
             console.log("Pay --> gameId: " + result.args._gameId + ", tradeId: " + result.args._tradeId
                 + ", seller: " + result.args._seller + ", payer: " + result.args._payer + ", amount: " + result.args._amount )
             if(gameId == result.args._gameId && tradeId == result.args._tradeId &&
-                    seller == result.args._seller && player == result.args._payer && amount == result.args._amount){
+                    seller == result.args._seller && player == result.args._payer){
                 callback(null,true)
                 recharge.Pay().stopWatching();
             }
@@ -183,7 +183,7 @@ function restoreWallet(seed,callback) {
 function newWallet(callback) {
   var extraEntropy =  '';
   randomSeed = lightwallet.keystore.generateRandomSeed(extraEntropy);
-
+  console.log("randomSeed:" + randomSeed)
   var infoString = 'Your new wallet seed is: "' + randomSeed +
     '". Please write it down on paper or in a password manager, you will need it to access your wallet. Do not let anyone see this seed or they can take your Ether. ' +
     'Please enter a password to encrypt your seed while in the browser.'
