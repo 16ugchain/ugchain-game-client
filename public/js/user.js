@@ -402,10 +402,18 @@
                                 console.log("获取第" + token.length + "个token");
                                 console.log(token); 
                                 gameToken = token[token.length-1].token;
-                                heroObj.modal("#tip","show",function(){
-                                    $("#tip-content").html("token：" + gameToken);
-                                });
+                                // heroObj.modal("#tip","show",function(){
+                                //     $("#tip-content").html("token：" + gameToken);
+                                // });
                                 importCreat = 0;
+                                console.log("获取新token,直接跳转");
+                                if(gameToken){
+                                    console.log("新token直接进入游戏");
+                                    // heroObj.modal("#tip","hide",function(){
+                                    //     console.log(gameToken);
+                                    // });
+                                    getUserData(gameToken,userName);
+                                }
 
                             })
                         }
