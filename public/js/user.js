@@ -169,7 +169,7 @@
                 if(body.meta.code == 200){
                     var dermaArr = body.data;
                     dermaArr.forEach(function(v,i){
-                        $("#modalBox").append('<div class="radio"><label><input type="radio" name="optionsRadios" id="optionsRadios' + v.id + '" value="' + v.id + '"><span class="derma-name">' + v.name + '</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="derma-prices">' + v.prices/1000 + '</span></label></div>');
+                        $("#modalBox").append('<div class="radio"><label><input type="radio" name="optionsRadios" id="optionsRadios' + v.id + '" value="' + v.id + '"><span class="derma-name">' + v.name + '</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="derma-prices">' + v.prices + '</span></label></div>');
                     })
                 }
             }
@@ -219,7 +219,7 @@
                             var seller = body.data.seller
                             
                             var prices = $('#modalBox input:radio:checked').siblings('span.derma-prices').html();
-                            prices = web3.toWei(+prices,"ether");
+                            // prices = web3.toWei(+prices,"ether");
                             console.log(prices);
                             console.log("###########");
                             
