@@ -381,7 +381,7 @@
                     // 初始化token
                     setTimeout(function(){
                         $(".hero-mask").fadeIn(0, function() {
-                            $(".mask-content").html("获取Token进行中...");
+                            $(".mask-content").html("进入游戏...");
                         });
                     },0)
                     
